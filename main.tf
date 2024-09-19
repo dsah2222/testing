@@ -23,6 +23,18 @@ resource "null_resource" "wait_for_task_completion" {
 
 
 
+terraform {
+  backend "s3" {
+    bucket         = "my-terraform-state-bucket"
+    key            = "path/to/my/key"
+    region         = "us-west-2"
+    dynamodb_table = "my-terraform-lock-table"  # Optional for state locking
+    encrypt        = true
+  }
+}
+
+
+
 
 
 
