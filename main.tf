@@ -71,3 +71,17 @@ resource "null_resource" "wait_for_task_completion" {
     EOT
   }
 }
+
+
+resource"aws_ecs_task" "task" {
+cluster = aws_ecs_cluster.tooling-mang-sandbox-cluster
+task_definition = aws_ecs_task_definition.ppure-tmgt.arn
+depends_on = [aws_ecs_service.ppure-tmgt-service]
+}
+
+resource"aws_ecs_task" "stopped_task" {
+cluster = aws_ecs_cluster.tooling-mang-sandbox-cluster
+task_definition = aws_ecs_task_definition.ppure-tmgt.arn
+depends_on = [aws_ecs_task.ppure-tmgt]
+desired_status = "STOPPED"
+}
