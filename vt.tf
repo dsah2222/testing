@@ -1,3 +1,45 @@
+resource "aws_iam_role" "athena_ecs_s3_role" {
+  name               = "AthenaECS3Role"
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [
+      {
+        Effect    = "Allow",
+        Principal = {
+          Service = "ecs-tasks.amazonaws.com"
+        },
+        Action    = "sts:AssumeRole",
+      },
+    ],
+  })
+}
+
+resource "aws_iam_role_policy_attachment" "athena_ecs_s3_role_policy_attachment" {
+  role      = aws_iam_role.athena_ecs_s3_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonAthenaFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "athena_ecs_s3_role_policy_attachment_ecs" {
+  role      = aws_iam_role.athena_ecs_s3_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEC2ContainerServiceFullAccess"
+}
+
+resource "aws_iam_role_policy_attachment" "athena_ecs_s3_role_policy_attachment_s3" {
+  role      = aws_iam_role.athena_ecs_s3_role.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonS3FullAccess"
+}
+
+
+
+
+
+
+
+
+
+
+
+
 resource "aws_ecs_cluster" "example" {
   name = "example"
 }
